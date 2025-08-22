@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  dynamodb:
+    image: amazon/dynamodb-local:latest
+    container_name: csconsulting-dynamodb
+    ports:
+      - "8000:8000"
+    command: ["-jar", "/home/dynamodblocal/DynamoDBLocal.jar", "-sharedDb", "-inMemory=false"]
+    volumes:
+      - dynamodb_data:/home/dynamodblocal/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8000/shell/"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  dynamodb_data:
